@@ -7,6 +7,10 @@ const app = express();
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 
+app.get('/health', (req, res) => {
+  res.send('OK')
+});
+
 // render checkout page with client id & unique client token
 app.get("/", async (req, res) => {
   const clientId = process.env.PAYPAL_CLIENT_ID;
