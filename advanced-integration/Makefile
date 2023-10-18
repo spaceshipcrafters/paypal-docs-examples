@@ -6,6 +6,9 @@
 up: .env
 	docker compose up -d
 
+ps: up
+	scripts/ps.sh
+
 restart:
 	docker compose restart $(svc)
 
@@ -15,7 +18,7 @@ code: up
 browse: up
 	scripts/browse.sh
 
-dev: up code browse
+dev: up ps code browse
 
 #
 # Cleanup
