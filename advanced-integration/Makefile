@@ -13,7 +13,7 @@ restart:
 	docker compose restart $(svc)
 
 code: up
-	scripts/code.sh ./server
+	scripts/code.sh "./server ./client"
 
 browse: up
 	scripts/browse.sh

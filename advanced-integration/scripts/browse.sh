@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ENV_FILE=".env"
-SERVICES=("server")
+SERVICES=("server" "client")
 
 open_in_browser () {
     local SERVICE=$1

@@ -1,0 +1,21 @@
+{
+  "name": "client",
+  "service": "client",
+  "dockerComposeFile": "../docker-compose.yml",
+  "shutdownAction": "none",
+  "workspaceFolder": "/code",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "codezombiech.gitignore",
+        "EditorConfig.EditorConfig",
+        "dbaeumer.vscode-eslint",
+        "ms-azuretools.vscode-docker",
+        "styled-components.vscode-styled-components",
+        "Vue.vscode-typescript-vue-plugin",
+        "Vue.volar"
+      ],
+      "settings": {}
+    }
+  }
+}
