@@ -1,0 +1,15 @@
+services:
+
+  server:
+    image: node:20
+    volumes:
+      - .:/code
+    working_dir: /code
+    ports:
+      - ${HOST_PORT_SERVER}:8888
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        npm i
+        npm start
