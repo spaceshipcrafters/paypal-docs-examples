@@ -1,10 +1,14 @@
 import "dotenv/config";
 import express from "express";
+import cors from "cors";
 import * as paypal from "./paypal-api.js";
 const { PORT = 8888 } = process.env;
 
 const app = express();
 app.set("view engine", "ejs");
+
+app.use(cors());
+
 app.use(express.static("public"));
 
 app.get('/health', (req, res) => {
@@ -21,6 +25,13 @@ app.get("/", async (req, res) => {
     res.status(500).send(err.message);
   }
 });
+
+// get client token
+app.get('/client-token', async (req, res) => {
+  const clientToken = await paypal.generateClientToken();
+
+  res.json({ clientToken });
+})
 
 // create order
 app.post("/api/orders", async (req, res) => {

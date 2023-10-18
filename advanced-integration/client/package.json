@@ -9,9 +9,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@paypal/paypal-js": "^7.0.3",
     "vue": "^3.3.4"
   },
   "devDependencies": {
+    "@types/node": "^20.8.7",
     "@vitejs/plugin-vue": "^4.2.3",
     "typescript": "^5.0.2",
     "vite": "^4.4.5",

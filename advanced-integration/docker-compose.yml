@@ -29,6 +29,9 @@ services:
     working_dir: /code
     ports:
       - ${HOST_PORT_CLIENT}:3000
+    environment:
+      VITE_API_BASE_URL: http://localhost:${HOST_PORT_SERVER}
+      VITE_PAYPAL_CLIENT_ID: ${PAYPAL_CLIENT_ID}
     depends_on:
       server:
         condition: service_healthy
