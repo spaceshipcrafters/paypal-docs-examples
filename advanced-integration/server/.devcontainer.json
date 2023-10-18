@@ -1,7 +1,7 @@
 {
   "name": "server",
   "service": "server",
-  "dockerComposeFile": "./docker-compose.yml",
+  "dockerComposeFile": "../docker-compose.yml",
   "shutdownAction": "none",
   "workspaceFolder": "/code",
   "customizations": {

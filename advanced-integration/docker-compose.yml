@@ -3,7 +3,7 @@ services:
   server:
     image: node:20
     volumes:
-      - .:/code
+      - ./server:/code
     working_dir: /code
     ports:
       - ${HOST_PORT_SERVER}:8888
