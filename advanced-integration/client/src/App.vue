@@ -12,7 +12,7 @@ import Paypal from './components/Paypal.vue';
     </a>
   </div>
   <Suspense>
-    <Paypal msg="123" />
+    <Paypal />
   </Suspense>
 </template>
 

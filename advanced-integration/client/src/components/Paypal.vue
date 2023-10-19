@@ -1,45 +1,42 @@
 <script setup lang="ts">
 import { loadScript } from '@paypal/paypal-js';
-import { ref } from 'vue'
 import { getClientToken } from './api';
 import {
   clientId
 } from '@/config';
+import { onBeforeMount } from 'vue';
 
-const count = ref(0)
+onBeforeMount(async () => {
 
-const dataClientToken = await getClientToken();
+  const dataClientToken = await getClientToken();
 
-const paypal = await loadScript({
-  clientId,
-  dataClientToken,
+  const paypal = await loadScript({
+    clientId,
+    dataClientToken,
+  });
+
+  paypal?.Buttons!({
+    createOrder: function(_, actions) {
+      return actions.order.create({
+        purchase_units: [{
+          amount: {
+            value: '0.01'
+          }
+        }]
+      });
+    },
+    onApprove: async function(_, actions) {
+      await actions.order!.capture();
+      alert('Transaction completed by ');
+    }
+  }).render('#paypal-button-container');
 });
 
-console.log(paypal);
 </script>
 
 <template>
 
-  <div class="card">
-    <button type="button" @click="count++">count is {{ count }}</button>
-    <p>
-      Edit
-      <code>components/HelloWorld.vue</code> to test HMR
-    </p>
-  </div>
-
-  <p>
-    Check out
-    <a href="https://vuejs.org/guide/quick-start.html#local" target="_blank"
-      >create-vue</a
-    >, the official Vue + Vite starter
-  </p>
-  <p>
-    Install
-    <a href="https://github.com/vuejs/language-tools" target="_blank">Volar</a>
-    in your IDE for a better DX
-  </p>
-  <p class="read-the-docs">Click on the Vite and Vue logos to learn more</p>
+  <div id="paypal-button-container"></div>
 </template>
 
 <style scoped>
