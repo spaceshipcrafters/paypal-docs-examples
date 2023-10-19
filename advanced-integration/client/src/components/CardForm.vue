@@ -3,43 +3,47 @@ import { onBeforeMount } from 'vue';
 import paypal from './paypal';
 import { createOrder } from './api';
 
-onBeforeMount(() => {
-    if (paypal?.HostedFields?.isEligible()) {
-        // let orderId;
+onBeforeMount(async () => {
+    if (!paypal?.HostedFields?.isEligible())
+        console.error("Hosted Fields are not eligible");
 
-        // Renders card fields
-        paypal?.HostedFields!.render({
-            // Call your server to set up the transaction
-            createOrder: () => createOrder(),
-            styles: {
-                ".valid": {
-                    color: "green",
-                },
-                ".invalid": {
-                    color: "red",
-                },
+    // let orderId;
+
+    // Renders card fields
+    const cf = await paypal?.HostedFields!.render({
+        // Call your server to set up the transaction
+        createOrder: () => createOrder(),
+        styles: {
+            ".valid": {
+                color: "green",
             },
-            fields: {
-                number: {
-                    selector: "#card-number",
-                    placeholder: "4111 1111 1111 1111",
-                },
-                cvv: {
-                    selector: "#cvv",
-                    placeholder: "123",
-                },
-                expirationDate: {
-                    selector: "#expiration-date",
-                    placeholder: "MM/YY",
-                },
+            ".invalid": {
+                color: "red",
             },
-        }).then((cardFields) => {
-            document.querySelector("#card-form")?.addEventListener("submit", async (event) => {
-                event.preventDefault();
-                await cardFields.submit();
-            });
-        });
-    }
+        },
+        fields: {
+            number: {
+                selector: "#card-number",
+                placeholder: "4111 1111 1111 1111",
+            },
+            cvv: {
+                selector: "#cvv",
+                placeholder: "123",
+            },
+            expirationDate: {
+                selector: "#expiration-date",
+                placeholder: "MM/YY",
+            },
+        },
+    });
+
+    if (!cf)
+        console.error("HostedFields could not be rendered");
+
+    document.querySelector("#card-form")?.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        await cf!.submit();
+    });
 });
 </script>
 
