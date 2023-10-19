@@ -93,8 +93,16 @@ export async function generateClientToken() {
       "Accept-Language": "en_US",
       "Content-Type": "application/json",
     },
+    body: JSON.stringify({
+      customer_id: "customer_1",
+    })
   });
-  console.log("response", response.status);
+  
+  if (response.status >= 400) {
+    const err = await response.text();
+    throw new Error(`Failed to generate client token: ${err}`);
+  }
+  
   const jsonData = await handleResponse(response);
   return jsonData.client_token;
 }

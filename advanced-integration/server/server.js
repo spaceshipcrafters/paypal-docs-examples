@@ -69,6 +69,8 @@ Customer id     : ${customerId}
 ---
     `);
 
+    res.json(captureData);
+
   } catch (err) {
     res.status(500).send(err.message);
   }
