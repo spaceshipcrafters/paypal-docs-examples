@@ -28,6 +28,15 @@ export async function createOrder() {
           },
         },
       ],
+      payment_source: {
+        card: {
+          attributes: {
+            vault: {
+              store_in_vault: "ON_SUCCESS"
+            }
+          }
+        }
+      }
     }),
   });
 

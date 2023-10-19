@@ -46,7 +46,7 @@ onBeforeMount(async () => {
 
     document.querySelector("#card-form")?.addEventListener("submit", async (event) => {
         event.preventDefault();
-        await cf!.submit();
+        await cf!.submit({});
         await captureOrder(orderId);
     });
 });
