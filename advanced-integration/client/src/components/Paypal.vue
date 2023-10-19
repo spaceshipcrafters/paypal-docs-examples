@@ -1,19 +1,9 @@
 <script setup lang="ts">
-import { loadScript } from '@paypal/paypal-js';
-import { getClientToken } from './api';
-import {
-  clientId
-} from '@/config';
 import { onBeforeMount } from 'vue';
+import CardForm from './CardForm.vue';
+import paypal from './paypal';
 
 onBeforeMount(async () => {
-
-  const dataClientToken = await getClientToken();
-
-  const paypal = await loadScript({
-    clientId,
-    dataClientToken
-  });
 
   paypal?.Buttons!({
     createOrder: function(_, actions) {
@@ -37,6 +27,7 @@ onBeforeMount(async () => {
 <template>
 
   <div id="paypal-button-container"></div>
+  <CardForm />
 </template>
 
 <style scoped>
