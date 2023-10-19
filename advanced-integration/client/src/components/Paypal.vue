@@ -12,7 +12,7 @@ onBeforeMount(async () => {
 
   const paypal = await loadScript({
     clientId,
-    dataClientToken,
+    dataClientToken
   });
 
   paypal?.Buttons!({
