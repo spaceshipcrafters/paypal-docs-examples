@@ -9,6 +9,9 @@ up: .env
 ps: up
 	scripts/ps.sh
 
+logs: up
+	docker compose logs --tail=8 -f $(svc)
+
 restart:
 	docker compose restart $(svc)
 
