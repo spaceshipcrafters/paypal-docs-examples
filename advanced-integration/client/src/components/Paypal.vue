@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { onBeforeMount } from 'vue';
+import { onMounted } from 'vue';
 import CardForm from './CardForm.vue';
 import paypal from './paypal';
 
-onBeforeMount(async () => {
+onMounted(async () => {
 
-  paypal?.Buttons!({
+  await paypal?.Buttons!({
     createOrder: function(_, actions) {
       return actions.order.create({
         purchase_units: [{
