@@ -22,7 +22,18 @@ const createOrder = async (): Promise<string> => {
     return id;
 };
 
+const captureOrder = async (orderId: string): Promise<void> => {
+
+    const response = await fetch(`${apiBaseUrl}/api/orders/${orderId}/capture`, {
+        method: 'POST'
+    });
+
+    if (response.status >= 400)
+        throw new Error('Failed to create order: ' + response.statusText);
+};
+
 export {
     getClientToken,
-    createOrder
+    createOrder,
+    captureOrder
 };

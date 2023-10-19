@@ -1,18 +1,22 @@
 <script setup lang="ts">
 import { onBeforeMount } from 'vue';
 import paypal from './paypal';
-import { createOrder } from './api';
+import { captureOrder, createOrder } from './api';
 
 onBeforeMount(async () => {
     if (!paypal?.HostedFields?.isEligible())
         console.error("Hosted Fields are not eligible");
 
-    // let orderId;
+    let orderId: string;
 
     // Renders card fields
     const cf = await paypal?.HostedFields!.render({
         // Call your server to set up the transaction
-        createOrder: () => createOrder(),
+        createOrder: async () => {
+            const id = await createOrder();
+            orderId = id;
+            return id;
+        },
         styles: {
             ".valid": {
                 color: "green",
@@ -43,6 +47,7 @@ onBeforeMount(async () => {
     document.querySelector("#card-form")?.addEventListener("submit", async (event) => {
         event.preventDefault();
         await cf!.submit();
+        await captureOrder(orderId);
     });
 });
 </script>
