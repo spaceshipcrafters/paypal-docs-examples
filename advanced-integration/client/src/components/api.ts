@@ -8,4 +8,21 @@ const getClientToken = async (): Promise<string> => {
     return clientToken;
 };
 
-export { getClientToken };
+const createOrder = async (): Promise<string> => {
+
+    const response = await fetch(`${apiBaseUrl}/api/orders`, {
+        method: 'POST'
+    });
+
+    if (response.status >= 400)
+        throw new Error('Failed to create order: ' + response.statusText);
+
+    const { id } = await response.json();
+
+    return id;
+};
+
+export {
+    getClientToken,
+    createOrder
+};

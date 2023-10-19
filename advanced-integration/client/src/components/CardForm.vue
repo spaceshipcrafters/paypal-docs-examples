@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onBeforeMount } from 'vue';
 import paypal from './paypal';
+import { createOrder } from './api';
 
 onBeforeMount(() => {
     if (paypal?.HostedFields?.isEligible()) {
@@ -9,26 +10,7 @@ onBeforeMount(() => {
         // Renders card fields
         paypal?.HostedFields!.render({
             // Call your server to set up the transaction
-            createOrder: () => {
-                return fetch("/api/orders", {
-                    method: "post",
-                    // use the "body" param to optionally pass additional order information
-                    // like product skus and quantities
-                    body: JSON.stringify({
-                        cart: [
-                            {
-                                sku: "<YOUR_PRODUCT_STOCK_KEEPING_UNIT>",
-                                quantity: "<YOUR_PRODUCT_QUANTITY>",
-                            },
-                        ],
-                    }),
-                })
-                    .then((res) => res.json())
-                    .then((orderData) => {
-                        // orderId = orderData.id; // needed later to complete capture
-                        return orderData.id;
-                    });
-            },
+            createOrder: () => createOrder(),
             styles: {
                 ".valid": {
                     color: "green",
