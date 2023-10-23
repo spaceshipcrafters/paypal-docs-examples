@@ -2,6 +2,7 @@ services:
 
   server:
     image: node:20
+    user: node
     volumes:
       - ./server:/code
     working_dir: /code
@@ -24,6 +25,7 @@ services:
 
   client:
     image: node:20
+    user: node
     volumes:
       - ./client:/code
     working_dir: /code
