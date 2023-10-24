@@ -9,7 +9,7 @@ const base = "https://api-m.sandbox.paypal.com";
  * @see https://developer.paypal.com/docs/api/orders/v2/#orders_create
  */
 export async function createOrder() {
-  const purchaseAmount = "100.00"; // TODO: pull prices from a database
+  const purchaseAmount = "0.01"; // TODO: pull prices from a database
   const accessToken = await generateAccessToken();
   const url = `${base}/v2/checkout/orders`;
   const response = await fetch(url, {
@@ -29,13 +29,26 @@ export async function createOrder() {
         },
       ],
       payment_source: {
-        card: {
+        paypal: {
           attributes: {
             vault: {
-              store_in_vault: "ON_SUCCESS"
+              store_in_vault: "ON_SUCCESS",
+              usage_type: "MERCHANT",
+              customer_type: "CONSUMER"
             }
+          },
+          experience_context: {
+            cancel_url: "https://localhost/cancel",
+            return_url: "https://localhost/return"
           }
-        }
+        },
+        // card: {
+        //   attributes: {
+        //     vault: {
+        //       store_in_vault: "ON_SUCCESS"
+        //     }
+        //   },
+        // }
       }
     }),
   });

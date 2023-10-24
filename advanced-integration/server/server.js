@@ -51,23 +51,26 @@ app.post("/api/orders/:orderID/capture", async (req, res) => {
 
     const card = captureData.payment_source.card;
 
-    const vaultStatus = card.attributes.vault.status;
+    if (card) {
 
-    if (vaultStatus !== 'VAULTED')
-      console.error('Card not vaulted');
+      const vaultStatus = card.attributes.vault.status;
 
-    const lastDigits = card.last_digits;
-    const vaultId = card.attributes.vault.id;
-    const customerId = card.attributes.vault.customer.id;
+      if (vaultStatus !== 'VAULTED')
+        console.error('Card not vaulted');
 
-    console.log(`
+      const lastDigits = card.last_digits;
+      const vaultId = card.attributes.vault.id;
+      const customerId = card.attributes.vault.customer.id;
+
+      console.log(`
 Card successfully vaulted!
 ---
 Card last digits: ${lastDigits}
 Vault id        : ${vaultId}
 Customer id     : ${customerId}
 ---
-    `);
+      `);
+    }
 
     res.json(captureData);
 

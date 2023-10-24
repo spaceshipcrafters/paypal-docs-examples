@@ -2,22 +2,16 @@
 import { onMounted } from 'vue';
 import CardForm from './CardForm.vue';
 import paypal from './paypal';
+import { createOrder, captureOrder } from './api';
 
 onMounted(async () => {
 
   await paypal?.Buttons!({
-    createOrder: function(_, actions) {
-      return actions.order.create({
-        purchase_units: [{
-          amount: {
-            value: '0.01'
-          }
-        }]
-      });
+    createOrder: async function() {
+      return await createOrder();
     },
-    onApprove: async function(_, actions) {
-      await actions.order!.capture();
-      alert('Transaction completed by ');
+    onApprove: async function(data) {
+      await captureOrder(data.orderID);
     }
   }).render('#paypal-button-container');
 });
