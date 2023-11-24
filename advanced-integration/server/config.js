@@ -1,0 +1,1 @@
+export const customerId = '18160';

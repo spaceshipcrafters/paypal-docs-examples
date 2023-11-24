@@ -1,4 +1,5 @@
 import fetch from "node-fetch";
+import { customerId } from "./config.js";
 
 // set some important variables
 const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET } = process.env;
@@ -23,34 +24,12 @@ export async function createOrder() {
       purchase_units: [
         {
           amount: {
-            currency_code: "USD",
+            currency_code: "EUR",
             value: purchaseAmount,
           },
         },
       ],
-      payment_source: {
-        paypal: {
-          attributes: {
-            vault: {
-              store_in_vault: "ON_SUCCESS",
-              usage_type: "MERCHANT",
-              customer_type: "CONSUMER"
-            }
-          },
-          experience_context: {
-            cancel_url: "https://localhost/cancel",
-            return_url: "https://localhost/return"
-          }
-        },
-        // card: {
-        //   attributes: {
-        //     vault: {
-        //       store_in_vault: "ON_SUCCESS"
-        //     }
-        //   },
-        // }
-      }
-    }),
+    })
   });
 
   return handleResponse(response);
@@ -69,6 +48,20 @@ export async function capturePayment(orderId) {
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
     },
+  });
+
+  return handleResponse(response);
+}
+
+export async function getPaymentTokens() {
+  const accessToken = await generateAccessToken();
+  const url = `${base}/v2/vault/payment-tokens?customer_id=${customerId}`;
+  const response = await fetch(url, {
+    method: "get",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    }
   });
 
   return handleResponse(response);
@@ -107,7 +100,7 @@ export async function generateClientToken() {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      customer_id: "customer_1",
+      customer_id: customerId,
     })
   });
   
