@@ -5,7 +5,6 @@ import { clientId } from "@/config";
 const dataClientToken = await getClientToken();
 
 const paypal = await loadScript({
-    vault: true,
     clientId,
     dataClientToken,
     components: "buttons,hosted-fields",

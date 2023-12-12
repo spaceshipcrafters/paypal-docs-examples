@@ -29,6 +29,24 @@ export async function createOrder() {
           },
         },
       ],
+      payment_source: {
+        paypal: {
+            attributes: {
+                customer: {
+                    id: customerId
+                },
+                vault: {
+                    confirm_payment_token: "ON_ORDER_COMPLETION",
+                    usage_type: "MERCHANT",
+                    customer_type: "CONSUMER"
+                }
+            },
+            experience_context: {
+              return_url: 'http://localhost:3000',
+              cancel_url: 'http://localhost:3000'
+            }
+        }
+      }
     })
   });
 

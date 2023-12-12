@@ -51,9 +51,11 @@ app.post("/api/orders/:orderID/capture", async (req, res) => {
 
     const captureData = await paypal.capturePayment(orderID);
 
-    const paymentTokens = await paypal.getPaymentTokens();
+    console.log("CAPTURE data:", captureData);
 
-    res.json(paymentTokens);
+    // const paymentTokens = await paypal.getPaymentTokens();
+
+    res.json(captureData);
 
   } catch (err) {
     res.status(500).send(err.message);
