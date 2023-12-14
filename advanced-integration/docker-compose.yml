@@ -1,0 +1,24 @@
+services:
+
+  server:
+    image: node:20
+    user: node
+    volumes:
+      - ./server:/code
+    working_dir: /code
+    ports:
+      - ${HOST_PORT_SERVER}:8888
+    environment:
+      PAYPAL_CLIENT_ID:
+      PAYPAL_CLIENT_SECRET:
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8888/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        npm i
+        npm start

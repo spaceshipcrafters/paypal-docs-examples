@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 
 // set some important variables
-const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET } = process.env;
+const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, PAYPAL_CUSTOMER_ID } = process.env;
 const base = "https://api-m.sandbox.paypal.com";
 
 /**
@@ -84,6 +84,9 @@ export async function generateClientToken() {
       "Accept-Language": "en_US",
       "Content-Type": "application/json",
     },
+    body: JSON.stringify({
+      customer_id: PAYPAL_CUSTOMER_ID,
+    }),
   });
   console.log("response", response.status);
   const jsonData = await handleResponse(response);
