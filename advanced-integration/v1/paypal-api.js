@@ -11,7 +11,7 @@ const {
 const base = "https://api-m.sandbox.paypal.com";
 
 /**
- * Create an order
+ * Create an order using the JS SDK
  * @see https://developer.paypal.com/docs/api/orders/v2/#orders_create
  */
 export async function createJsSdkOrder() {
@@ -58,6 +58,10 @@ export async function createJsSdkOrder() {
   return handleResponse(response);
 }
 
+/**
+ * Create an order using the Orders API
+ * @see https://developer.paypal.com/docs/api/orders/v2/#orders_create
+ */
 export async function createOrdersApiOrder() {
   const accessToken = await generateAccessToken();
   const url = `${base}/v2/checkout/orders`;
