@@ -2,7 +2,7 @@ window.paypal
   .Buttons({
     // Sets up the transaction when a payment button is clicked
     createOrder: function () {
-      return fetch("/api/orders", {
+      return fetch("/api/ordersapi/orders", {
         method: "post",
         // use the "body" param to optionally pass additional order information
         // like product skus and quantities
@@ -53,7 +53,7 @@ if (window.paypal.HostedFields.isEligible()) {
   window.paypal.HostedFields.render({
     // Call your server to set up the transaction
     createOrder: () => {
-      return fetch("/api/orders", {
+      return fetch("/api/jssdk/orders", {
         method: "post",
         // use the "body" param to optionally pass additional order information
         // like product skus and quantities
