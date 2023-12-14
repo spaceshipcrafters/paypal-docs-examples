@@ -139,6 +139,8 @@ export async function generateClientToken() {
       "Accept-Language": "en_US",
       "Content-Type": "application/json",
     },
+    
+    // Per: https://developer.paypal.com/limited-release/vault-payment-methods/vault-sdk/#link-steppasstheclienttokentothepaypaljavascriptsdk
     body: JSON.stringify({
       customer_id: PAYPAL_CUSTOMER_ID,
     }),

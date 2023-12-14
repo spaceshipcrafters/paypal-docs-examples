@@ -102,6 +102,8 @@ if (window.paypal.HostedFields.isEligible()) {
       event.preventDefault();
       cardFields
         .submit({
+          // Per https://developer.paypal.com/limited-release/vault-payment-methods/vault-sdk/#link-stepupdateyourcodetopassthevalueofthecheckbox
+          vault: true,
           // Cardholder's first and last name
           cardholderName: document.getElementById("card-holder-name").value,
           // Billing Address
