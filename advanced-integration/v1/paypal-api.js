@@ -32,26 +32,7 @@ export async function createJsSdkOrder() {
             value: PAYPAL_PURCHASE_AMOUNT,
           },
         },
-      ],
-      // Per https://developer.paypal.com/limited-release/vault-payment-methods/orders-api/#link-modifyyourintegration
-      payment_source: {
-        paypal: {
-            attributes: {
-                customer: {
-                    id: PAYPAL_CUSTOMER_ID
-                },
-                vault: {
-                    confirm_payment_token: "ON_ORDER_COMPLETION",
-                    usage_type: "MERCHANT",
-                    customer_type: "CONSUMER"
-                }
-            },
-            experience_context: {
-              return_url: 'http://localhost:8888',
-              cancel_url: 'http://localhost:8888'
-            }
-        }
-      }
+      ]
     }),
   });
 
@@ -80,7 +61,28 @@ export async function createOrdersApiOrder() {
             value: PAYPAL_PURCHASE_AMOUNT,
           },
         },
-      ]
+      ],
+
+      // Per https://developer.paypal.com/limited-release/vault-payment-methods/orders-api/#link-modifyyourintegration
+      payment_source: {
+        paypal: {
+            attributes: {
+                customer: {
+                    id: PAYPAL_CUSTOMER_ID
+                },
+                vault: {
+                    confirm_payment_token: "ON_ORDER_COMPLETION",
+                    usage_type: "MERCHANT",
+                    customer_type: "CONSUMER"
+                }
+            },
+            experience_context: {
+              return_url: 'http://localhost:8888',
+              cancel_url: 'http://localhost:8888'
+            }
+        }
+      }
+
     }),
   });
 
