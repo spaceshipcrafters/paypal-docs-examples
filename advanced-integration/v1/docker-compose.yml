@@ -1,0 +1,17 @@
+services:
+
+  server:
+    container_name: paypal-example-server
+    image: node:20
+    user: node
+    volumes:
+      - .:/code
+    working_dir: /code
+    ports:
+      - 8888:8888
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        npm i
+        npm start

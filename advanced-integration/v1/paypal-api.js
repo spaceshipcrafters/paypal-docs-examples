@@ -1,15 +1,20 @@
 import fetch from "node-fetch";
 
 // set some important variables
-const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET } = process.env;
+const {
+  PAYPAL_CLIENT_ID,
+  PAYPAL_CLIENT_SECRET,
+  PAYPAL_CUSTOMER_ID,
+  PAYPAL_PURCHASE_AMOUNT,
+  PAYPAL_PURCHASE_CURRENCY
+} = process.env;
 const base = "https://api-m.sandbox.paypal.com";
 
 /**
- * Create an order
+ * Create an order using the JS SDK
  * @see https://developer.paypal.com/docs/api/orders/v2/#orders_create
  */
-export async function createOrder() {
-  const purchaseAmount = "100.00"; // TODO: pull prices from a database
+export async function createJsSdkOrder() {
   const accessToken = await generateAccessToken();
   const url = `${base}/v2/checkout/orders`;
   const response = await fetch(url, {
@@ -23,11 +28,61 @@ export async function createOrder() {
       purchase_units: [
         {
           amount: {
-            currency_code: "USD",
-            value: purchaseAmount,
+            currency_code: PAYPAL_PURCHASE_CURRENCY,
+            value: PAYPAL_PURCHASE_AMOUNT,
+          },
+        },
+      ]
+    }),
+  });
+
+  return handleResponse(response);
+}
+
+/**
+ * Create an order using the Orders API
+ * @see https://developer.paypal.com/docs/api/orders/v2/#orders_create
+ */
+export async function createOrdersApiOrder() {
+  const accessToken = await generateAccessToken();
+  const url = `${base}/v2/checkout/orders`;
+  const response = await fetch(url, {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify({
+      intent: "CAPTURE",
+      purchase_units: [
+        {
+          amount: {
+            currency_code: PAYPAL_PURCHASE_CURRENCY,
+            value: PAYPAL_PURCHASE_AMOUNT,
           },
         },
       ],
+
+      // Per https://developer.paypal.com/limited-release/vault-payment-methods/orders-api/#link-modifyyourintegration
+      payment_source: {
+        paypal: {
+            attributes: {
+                customer: {
+                    id: PAYPAL_CUSTOMER_ID
+                },
+                vault: {
+                    confirm_payment_token: "ON_ORDER_COMPLETION",
+                    usage_type: "MERCHANT",
+                    customer_type: "CONSUMER"
+                }
+            },
+            experience_context: {
+              return_url: 'http://localhost:8888',
+              cancel_url: 'http://localhost:8888'
+            }
+        }
+      }
+
     }),
   });
 
@@ -84,10 +139,33 @@ export async function generateClientToken() {
       "Accept-Language": "en_US",
       "Content-Type": "application/json",
     },
+    
+    // Per: https://developer.paypal.com/limited-release/vault-payment-methods/vault-sdk/#link-steppasstheclienttokentothepaypaljavascriptsdk
+    body: JSON.stringify({
+      customer_id: PAYPAL_CUSTOMER_ID,
+    }),
   });
   console.log("response", response.status);
   const jsonData = await handleResponse(response);
   return jsonData.client_token;
+}
+
+/**
+ * Get payment tokens
+ */
+export async function getPaymentTokens() {
+  const accessToken = await generateAccessToken();
+  const url = `${base}/v2/vault/payment-tokens?customer_id=${PAYPAL_CUSTOMER_ID}`;
+  const response = await fetch(url, {
+    method: "get",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    }
+  });
+
+  const jsonData = await handleResponse(response);
+  return jsonData.payment_tokens;
 }
 
 async function handleResponse(response) {

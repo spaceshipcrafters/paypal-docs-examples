@@ -2,7 +2,7 @@ window.paypal
   .Buttons({
     // Sets up the transaction when a payment button is clicked
     createOrder: function () {
-      return fetch("/api/orders", {
+      return fetch("/api/ordersapi/orders", {
         method: "post",
         // use the "body" param to optionally pass additional order information
         // like product skus and quantities
@@ -20,7 +20,7 @@ window.paypal
     },
     // Finalize the transaction after payer approval
     onApprove: function (data) {
-      return fetch(`/api/orders/${data.orderID}/capture`, {
+      return fetch(`/api/ordersapi/orders/${data.orderID}/capture`, {
         method: "post",
       })
         .then((response) => response.json())
@@ -31,8 +31,11 @@ window.paypal
             orderData,
             JSON.stringify(orderData, null, 2),
           );
-          const transaction = orderData.purchase_units[0].payments.captures[0];
-          alert(`Transaction ${transaction.status}: ${transaction.id}
+          
+            if (!orderData.paymentToken)
+              console.error('Payment token not found in capture response! See server console output for more details.');
+
+          alert(`Transaction ${orderData.transactionStatus}: ${orderData.transactionId}
 
             See console for all available details
           `);
@@ -53,7 +56,7 @@ if (window.paypal.HostedFields.isEligible()) {
   window.paypal.HostedFields.render({
     // Call your server to set up the transaction
     createOrder: () => {
-      return fetch("/api/orders", {
+      return fetch("/api/jssdk/orders", {
         method: "post",
         // use the "body" param to optionally pass additional order information
         // like product skus and quantities
@@ -99,6 +102,8 @@ if (window.paypal.HostedFields.isEligible()) {
       event.preventDefault();
       cardFields
         .submit({
+          // Per https://developer.paypal.com/limited-release/vault-payment-methods/vault-sdk/#link-stepupdateyourcodetopassthevalueofthecheckbox
+          vault: true,
           // Cardholder's first and last name
           cardholderName: document.getElementById("card-holder-name").value,
           // Billing Address
@@ -126,7 +131,7 @@ if (window.paypal.HostedFields.isEligible()) {
           },
         })
         .then(() => {
-          fetch(`/api/orders/${orderId}/capture`, {
+          fetch(`/api/jssdk/orders/${orderId}/capture`, {
             method: "post",
           })
             .then((res) => res.json())
