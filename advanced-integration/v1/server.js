@@ -67,9 +67,11 @@ app.post("/api/ordersapi/orders/:orderID/capture", async (req, res) => {
 
     console.log('CAPTURE response', captureData);
 
-    console.log('Payment tokens', 'TBD');
+    const paymentToken = captureData.payment_source.paypal.attributes.vault.id;
 
-    res.json(captureData);
+    console.log('Payment token:', paymentToken);
+
+    res.json(paymentToken);
 
   } catch (err) {
     console.error('Error capturing order and acquiring payment tokens: ', err);

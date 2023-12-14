@@ -162,7 +162,8 @@ export async function getPaymentTokens() {
     }
   });
 
-  return handleResponse(response);
+  const jsonData = await handleResponse(response);
+  return jsonData.tokens;
 }
 
 async function handleResponse(response) {
