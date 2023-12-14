@@ -9,7 +9,7 @@ const base = "https://api-m.sandbox.paypal.com";
  * @see https://developer.paypal.com/docs/api/orders/v2/#orders_create
  */
 export async function createOrder() {
-  const purchaseAmount = "100.00"; // TODO: pull prices from a database
+  const purchaseAmount = "0.01"; // TODO: pull prices from a database
   const accessToken = await generateAccessToken();
   const url = `${base}/v2/checkout/orders`;
   const response = await fetch(url, {
@@ -91,6 +91,23 @@ export async function generateClientToken() {
   console.log("response", response.status);
   const jsonData = await handleResponse(response);
   return jsonData.client_token;
+}
+
+/**
+ * Get payment tokens
+ */
+export async function getPaymentTokens() {
+  const accessToken = await generateAccessToken();
+  const url = `${base}/v2/vault/payment-tokens?customer_id=${PAYPAL_CUSTOMER_ID}`;
+  const response = await fetch(url, {
+    method: "get",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    }
+  });
+
+  return handleResponse(response);
 }
 
 async function handleResponse(response) {
