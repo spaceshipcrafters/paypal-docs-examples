@@ -9,10 +9,12 @@ services:
     working_dir: /code
     ports:
       - 8888:8888
-    environment:
-      PAYPAL_CLIENT_ID:
-      PAYPAL_CLIENT_SECRET:
-      PAYPAL_CUSTOMER_ID:
+    # environment:
+    #   PAYPAL_CLIENT_ID:
+    #   PAYPAL_CLIENT_SECRET:
+    #   PAYPAL_CUSTOMER_ID:
+    #   PAYPAL_PURCHASE_AMOUNT:
+    #   PAYPAL_PURCHASE_CURRENCY:
     entrypoint:
       - /bin/bash
       - -c

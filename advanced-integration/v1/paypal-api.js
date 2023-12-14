@@ -1,15 +1,20 @@
 import fetch from "node-fetch";
 
 // set some important variables
-const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, PAYPAL_CUSTOMER_ID } = process.env;
+const {
+  PAYPAL_CLIENT_ID,
+  PAYPAL_CLIENT_SECRET,
+  PAYPAL_CUSTOMER_ID,
+  PAYPAL_PURCHASE_AMOUNT,
+  PAYPAL_PURCHASE_CURRENCY
+} = process.env;
 const base = "https://api-m.sandbox.paypal.com";
 
 /**
  * Create an order
  * @see https://developer.paypal.com/docs/api/orders/v2/#orders_create
  */
-export async function createOrder() {
-  const purchaseAmount = "0.01"; // TODO: pull prices from a database
+export async function createJsSdkOrder() {
   const accessToken = await generateAccessToken();
   const url = `${base}/v2/checkout/orders`;
   const response = await fetch(url, {
@@ -23,8 +28,8 @@ export async function createOrder() {
       purchase_units: [
         {
           amount: {
-            currency_code: "USD",
-            value: purchaseAmount,
+            currency_code: PAYPAL_PURCHASE_CURRENCY,
+            value: PAYPAL_PURCHASE_AMOUNT,
           },
         },
       ],
@@ -47,6 +52,31 @@ export async function createOrder() {
             }
         }
       }
+    }),
+  });
+
+  return handleResponse(response);
+}
+
+export async function createOrdersApiOrder() {
+  const accessToken = await generateAccessToken();
+  const url = `${base}/v2/checkout/orders`;
+  const response = await fetch(url, {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify({
+      intent: "CAPTURE",
+      purchase_units: [
+        {
+          amount: {
+            currency_code: PAYPAL_PURCHASE_CURRENCY,
+            value: PAYPAL_PURCHASE_AMOUNT,
+          },
+        },
+      ]
     }),
   });
 

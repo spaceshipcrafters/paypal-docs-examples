@@ -18,18 +18,48 @@ app.get("/", async (req, res) => {
   }
 });
 
-// create order
-app.post("/api/orders", async (req, res) => {
+// create order with JS SDK flow
+app.post("/api/jssdk/orders", async (req, res) => {
   try {
-    const order = await paypal.createOrder();
+    const order = await paypal.createJsSdkOrder();
     res.json(order);
   } catch (err) {
     res.status(500).send(err.message);
   }
 });
 
-// capture payment
-app.post("/api/orders/:orderID/capture", async (req, res) => {
+// create order with Orders API flow
+app.post("/api/ordersapi/orders", async (req, res) => {
+  try {
+    const order = await paypal.createOrdersApiOrder();
+    res.json(order);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
+// capture payment with JS SDK flow
+app.post("/api/jssdk/orders/:orderID/capture", async (req, res) => {
+  const { orderID } = req.params;
+  try {
+    const captureData = await paypal.capturePayment(orderID);
+
+    console.log('CAPTURE response', captureData);
+
+    const paymentTokens = await paypal.getPaymentTokens();
+
+    console.log('Payment tokens', paymentTokens);
+
+    res.json(paymentTokens);
+
+  } catch (err) {
+    console.error('Error capturing order and acquiring payment tokens: ', err);
+    res.status(500).send(err.message);
+  }
+});
+
+// capture payment with Orders API flow
+app.post("/api/ordersapi/orders/:orderID/capture", async (req, res) => {
   const { orderID } = req.params;
   try {
     const captureData = await paypal.capturePayment(orderID);
