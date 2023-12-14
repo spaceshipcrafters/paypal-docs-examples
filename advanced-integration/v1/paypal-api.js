@@ -163,7 +163,7 @@ export async function getPaymentTokens() {
   });
 
   const jsonData = await handleResponse(response);
-  return jsonData.tokens;
+  return jsonData.payment_tokens;
 }
 
 async function handleResponse(response) {
