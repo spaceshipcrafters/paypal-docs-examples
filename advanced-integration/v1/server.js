@@ -64,6 +64,10 @@ app.post("/api/ordersapi/orders/:orderID/capture", async (req, res) => {
   const { orderID } = req.params;
   try {
     const captureData = await paypal.capturePayment(orderID);
+    const {
+      id: transactionId,
+      status: transactionStatus
+    } = captureData.purchase_units[0].payments.captures[0];
 
     console.log('CAPTURE response', captureData);
 
@@ -71,7 +75,11 @@ app.post("/api/ordersapi/orders/:orderID/capture", async (req, res) => {
 
     console.log('Payment token:', paymentToken);
 
-    res.json(paymentToken);
+    res.json({
+      transactionId,
+      transactionStatus,
+      paymentToken
+    });
 
   } catch (err) {
     console.error('Error capturing order and acquiring payment tokens: ', err);

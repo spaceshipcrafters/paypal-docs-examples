@@ -31,8 +31,7 @@ window.paypal
             orderData,
             JSON.stringify(orderData, null, 2),
           );
-          const transaction = orderData.purchase_units[0].payments.captures[0];
-          alert(`Transaction ${transaction.status}: ${transaction.id}
+          alert(`Transaction ${orderData.transactionStatus}: ${orderData.transactionId}
 
             See console for all available details
           `);
