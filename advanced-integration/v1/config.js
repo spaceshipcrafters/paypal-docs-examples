@@ -1,1 +1,0 @@
-export const customerId = '102030';
