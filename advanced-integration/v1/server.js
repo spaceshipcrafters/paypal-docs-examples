@@ -10,9 +10,10 @@ app.use(express.static("public"));
 // render checkout page with client id & unique client token
 app.get("/", async (req, res) => {
   const clientId = process.env.PAYPAL_CLIENT_ID;
+  const currency = process.env.PAYPAL_PURCHASE_CURRENCY;
   try {
     const clientToken = await paypal.generateClientToken();
-    res.render("checkout", { clientId, clientToken });
+    res.render("checkout", { clientId, clientToken, currency });
   } catch (err) {
     res.status(500).send(err.message);
   }
@@ -66,11 +67,9 @@ app.post("/api/ordersapi/orders/:orderID/capture", async (req, res) => {
 
     console.log('CAPTURE response', captureData);
 
-    const paymentTokens = await paypal.getPaymentTokens();
+    console.log('Payment tokens', 'TBD');
 
-    console.log('Payment tokens', paymentTokens);
-
-    res.json(paymentTokens);
+    res.json(captureData);
 
   } catch (err) {
     console.error('Error capturing order and acquiring payment tokens: ', err);

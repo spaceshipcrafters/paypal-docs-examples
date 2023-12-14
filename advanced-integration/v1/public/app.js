@@ -20,7 +20,7 @@ window.paypal
     },
     // Finalize the transaction after payer approval
     onApprove: function (data) {
-      return fetch(`/api/orders/${data.orderID}/capture`, {
+      return fetch(`/api/ordersapi/orders/${data.orderID}/capture`, {
         method: "post",
       })
         .then((response) => response.json())
@@ -126,7 +126,7 @@ if (window.paypal.HostedFields.isEligible()) {
           },
         })
         .then(() => {
-          fetch(`/api/orders/${orderId}/capture`, {
+          fetch(`/api/jssdk/orders/${orderId}/capture`, {
             method: "post",
           })
             .then((res) => res.json())
