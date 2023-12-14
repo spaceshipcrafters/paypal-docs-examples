@@ -71,7 +71,7 @@ app.post("/api/ordersapi/orders/:orderID/capture", async (req, res) => {
 
     console.log('CAPTURE response', captureData);
 
-    const paymentToken = captureData.payment_source.paypal.attributes.vault.id;
+    const paymentToken = captureData.payment_source.paypal.attributes?.vault?.id;
 
     console.log('Payment token:', paymentToken);
 

@@ -31,6 +31,10 @@ window.paypal
             orderData,
             JSON.stringify(orderData, null, 2),
           );
+          
+            if (!orderData.paymentToken)
+              console.error('Payment token not found in capture response! See server console output for more details.');
+
           alert(`Transaction ${orderData.transactionStatus}: ${orderData.transactionId}
 
             See console for all available details
